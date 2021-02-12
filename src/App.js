@@ -40,10 +40,19 @@ const toggleReminder = (id) => {
   {...task,reminder: !task.reminder}:task))
 }
 
+//Add task 
+
+const addTask = (task)=>{
+    const id  = Math.floor(Math.random()*10000)+1
+    //console.log(id)
+    const newTask = {id,...task}
+    setTasks([...tasks,newTask])
+}
+
   return (
     <div className="container">
       <Header />
-      < AddTask/>
+      < AddTask onAdd = {addTask} />
       {tasks.length>0?<Tasks tasks={tasks} 
       onDelete = {deleteTask} onToggle={toggleReminder} />:"No MF no Tasks u just deleted them all"}
     </div>

@@ -28,6 +28,8 @@ function App() {
         ]
 )
 
+const [showAddTask, setShowAddTask] = useState(false) 
+
 //delete task
 
 const deleteTask = (id)=>{
@@ -49,10 +51,17 @@ const addTask = (task)=>{
     setTasks([...tasks,newTask])
 }
 
+
+//&& is shorter way of doing ternery
   return (
+
     <div className="container">
-      <Header />
-      < AddTask onAdd = {addTask} />
+      <Header onAdd = {()=>setShowAddTask
+        (!showAddTask)} showAdd = {showAddTask}  />
+
+
+      { showAddTask && < AddTask onAdd = {addTask} />}
+
       {tasks.length>0?<Tasks tasks={tasks} 
       onDelete = {deleteTask} onToggle={toggleReminder} />:"No MF no Tasks u just deleted them all"}
     </div>

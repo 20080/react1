@@ -7,22 +7,22 @@ function App() {
     [
         { id:'1',
           text:'Doctor appointment',
-          day:'HEHE',
-          reminder:'true'
+          day:'jan 1 2022',
+          reminder:'false'
         },
         { id:'2',
-          text:'appointment',
-          day:'HEHE',
+          text:'appointment for nothing',
+          day:'Its just example what you want',
           reminder:'true'
         },
         { id:'3',
-          text:'Doctor ntment',
-          day:'HEHE',
+          text:'YUP TASK',
+          day:'ANY DAY',
           reminder:'true'
         },
         { id:'4',
-          text:'tor appointment',
-          day:'HEHE',
+          text:'Heh I am busy',
+          day:'WHat',
           reminder:'false'
         }
         ]

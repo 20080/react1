@@ -1,54 +1,94 @@
 import Header from "./components/Header"
 import Tasks from "./components/Tasks"
 import AddTask from "./components/AddTask"
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 function App() {
-  const [tasks,setTasks] = useState(
-    [
-        { id:'1',
-          text:'Doctor appointment',
-          day:'jan 1 2022',
-          reminder:'false'
-        },
-        { id:'2',
-          text:'appointment for nothing',
-          day:'Its just example what you want',
-          reminder:'true'
-        },
-        { id:'3',
-          text:'YUP TASK',
-          day:'ANY DAY',
-          reminder:'true'
-        },
-        { id:'4',
-          text:'Heh I am busy',
-          day:'WHat',
-          reminder:'false'
-        }
-        ]
-)
+  const [tasks,setTasks] = useState([])
+
+
+  //it is function which starts at begining
+  useEffect(() => {
+
+    const getTasks  = async () => {
+      const getTasksFromServer = await fetchTasks()
+      setTasks(getTasksFromServer)
+    }
+    getTasks()
+  }, [])
+
+  //fetching from backend
+
+  const fetchTasks = async () => {
+    const res = await fetch("http://localhost:5000/tasks")
+    const data = await res.json()
+    return data
+  }
+
+  const fetchTaskReminder =   async (id) => {
+    const res = await fetch(`http://localhost:5000/tasks/${id}`)
+    const data = await res.json()
+    return data
+  }
 
 const [showAddTask, setShowAddTask] = useState(false) 
 
-//delete task
+//delete task // async it for when working on backend // dont do https mistake
 
-const deleteTask = (id)=>{
+const deleteTask = async (id) => {
+  await fetch(`http://localhost:5000/tasks/${id}`,
+  {
+    method:'DELETE',
+  })
+
   setTasks(tasks.filter((task)=>task.id!==id))
 }
 
 //toggle reminder//important
-const toggleReminder = (id) => {
-  setTasks(tasks.map((task)=>task.id=== id ?
-  {...task,reminder: !task.reminder}:task))
+const toggleReminder = async (id) => {
+
+  const taskToToggle = await fetchTaskReminder(id)
+  const updatedTask =   {...taskToToggle, 
+    reminder: !taskToToggle.reminder}
+
+  const res = await fetch(`http://localhost:5000/tasks/${id}`,{
+    method:"PUT",
+    headers:{
+      "Content-type": "application/json"
+    },
+    body: JSON.stringify(updatedTask),
+  })
+
+  const data = await res.json()
+  //!task to !data
+  setTasks(
+    tasks.map((task)=>
+    task.id=== id ?{ ...task, reminder:
+       data.reminder }:task
+       )
+    )
 }
 
-//Add task 
+//Add task //backend async
 
-const addTask = (task)=>{
-    const id  = Math.floor(Math.random()*10000)+1
-    //console.log(id)
-    const newTask = {id,...task}
-    setTasks([...tasks,newTask])
+const addTask = async (task)=>{
+    
+const res = await fetch('http://localhost:5000/tasks/', {
+  method: "POST",
+  headers: {
+    'Content-type': 'application/json'
+  },
+  body: JSON.stringify(task),
+})
+
+const data =  await res.json()
+
+setTasks([...tasks,data])
+
+
+    //for frontEnd end testing // backend Automatically provides ID primary key i guess
+    // const id  = Math.floor(Math.random()*10000)+1
+    // const newTask = {id,...task}
+    // setTasks([...tasks,newTask])
 }
 
 
@@ -63,7 +103,7 @@ const addTask = (task)=>{
       { showAddTask && < AddTask onAdd = {addTask} />}
 
       {tasks.length>0?<Tasks tasks={tasks} 
-      onDelete = {deleteTask} onToggle={toggleReminder} />:"No MF no Tasks u just deleted them all"}
+      onDelete = {deleteTask} onToggle={toggleReminder} />:"No tasks found click add buton to get started"}
     </div>
     
   );

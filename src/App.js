@@ -1,12 +1,13 @@
 import Header from "./components/Header"
 import Tasks from "./components/Tasks"
 import AddTask from "./components/AddTask"
+import Footer from "./components/Footer"
 import {useState, useEffect} from 'react'
 function App() {
   const [tasks,setTasks] = useState([])
 
 
-  //it is function which starts at begining
+  //it is function which starts at beginning
   useEffect(() => {
 
     const getTasks  = async () => {
@@ -104,6 +105,8 @@ setTasks([...tasks,data])
 
       {tasks.length>0?<Tasks tasks={tasks} 
       onDelete = {deleteTask} onToggle={toggleReminder} />:"No tasks found click add buton to get started"}
+
+      <Footer/>
     </div>
     
   );

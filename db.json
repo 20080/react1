@@ -1,16 +1,10 @@
 {
   "tasks": [
     {
-      "text": "HI",
-      "day": "New ",
-      "reminder": true,
-      "id": 3
-    },
-    {
       "text": "New Task",
-      "day": "HI",
+      "day": "Main",
       "reminder": true,
-      "id": 4
+      "id": 1
     }
   ]
 }
